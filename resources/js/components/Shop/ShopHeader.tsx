@@ -111,11 +111,11 @@ export default function NavBarOne() {
       onMouseLeave={() => {
         if (!isMobileViewport) closeCategories();
       }}
-      className="sticky top-0 z-50 w-full border-b border-brand-border bg-white pt-[env(safe-area-inset-top)] dark:bg-[#111111]"
+      className="site-header sticky top-0 z-50 w-full border-b border-white/10 bg-[#0B0B0C] pt-[env(safe-area-inset-top)] text-white"
     >
       <div className="mx-auto w-full max-w-[1920px]">
         {/* Top bar — mobile matches desktop: search + bag stay visible top-right */}
-        <div className="flex min-h-[3.5rem] items-center gap-2 px-3 sm:min-h-[4.25rem] sm:gap-3 md:min-h-[5.5rem] md:justify-center md:gap-6 md:px-4 lg:gap-8">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-3 py-2 sm:gap-3 sm:px-4 md:min-h-[5.5rem] md:flex-nowrap md:justify-center md:gap-6 md:py-0 lg:gap-8">
           {/* Burger — mobile only */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -123,7 +123,7 @@ export default function NavBarOne() {
                 type="button"
                 variant="outline"
                 size="icon"
-                className="relative z-10 h-10 w-10 shrink-0 touch-manipulation rounded-xl border-2 border-primary/40 bg-brand-pink-soft text-brand-dark shadow-sm hover:bg-brand-pink-light/50 md:hidden"
+                className="relative z-10 order-1 h-11 w-11 shrink-0 touch-manipulation rounded-full border-0 bg-transparent text-white hover:bg-white/10 md:order-none md:hidden"
                 aria-label={t("Menu")}
               >
                 <Menu className="h-5 w-5" strokeWidth={2.5} aria-hidden />
@@ -132,10 +132,10 @@ export default function NavBarOne() {
             <SheetContent
               side={direction === "rtl" ? "right" : "left"}
               overlayClassName="bg-zinc-900/40 backdrop-blur-sm"
-              className="flex !w-[min(26rem,calc(100vw-0.75rem))] !max-w-none flex-col gap-0 border-brand-border bg-white p-0 text-brand-text shadow-soft sm:!max-w-md"
+              className="flex !w-[min(26rem,calc(100vw-0.75rem))] !max-w-none flex-col gap-0 border-brand-border bg-background p-0 text-foreground shadow-soft sm:!max-w-md"
             >
-              <SheetHeader className="border-b border-brand-border/90 bg-white px-5 py-5">
-                <SheetTitle className="text-xl font-bold tracking-tight text-zinc-900">
+              <SheetHeader className="border-b border-brand-border/90 bg-background px-5 py-5">
+                <SheetTitle className="text-xl font-bold tracking-tight text-foreground">
                   {t("Menu")}
                 </SheetTitle>
               </SheetHeader>
@@ -291,12 +291,12 @@ export default function NavBarOne() {
           </Sheet>
 
           {/* Logo */}
-          <Link href="/" className="flex shrink-0 items-center">
-            <BrandLogo className="h-12 w-auto object-contain sm:h-16 md:h-20" />
+          <Link href="/" className="order-2 flex shrink-0 items-center md:order-none">
+            <BrandLogo tone="on-dark" className="h-12 w-auto object-contain sm:h-14 md:h-16" />
           </Link>
 
           {/* Search — same control mobile + desktop, stays next to bag */}
-          <div className="min-w-0 flex-1 md:max-w-sm lg:max-w-md xl:max-w-lg">
+          <div className="order-4 min-w-0 w-full basis-full md:order-none md:w-auto md:max-w-sm md:flex-1 md:basis-auto lg:max-w-md xl:max-w-lg">
             <SearchAutocomplete
               mobile={isMobileViewport}
               className="w-full max-w-none"
@@ -306,20 +306,20 @@ export default function NavBarOne() {
           {/* Desktop nav links — compact */}
           {isClient && (
             <nav className="hidden shrink-0 items-center gap-5 md:flex">
-              <Link href="/products" className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-text hover:text-[#C6A15B]">
+              <Link href="/products" className="text-[13px] font-medium text-white/80 hover:text-[#D9B08C]">
                 {t("New collection")}
               </Link>
-              <Link href="/category/robes" className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-text hover:text-[#C6A15B]">
+              <Link href="/category/robes" className="text-[13px] font-medium text-white/80 hover:text-[#D9B08C]">
                 {t("Dresses")}
               </Link>
-              <Link href="/category/accessoires" className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-text hover:text-[#C6A15B]">
+              <Link href="/category/accessoires" className="text-[13px] font-medium text-white/80 hover:text-[#D9B08C]">
                 {t("Accessories")}
               </Link>
             </nav>
           )}
 
           {/* Actions — bag always top-right next to search (mobile = desktop) */}
-          <div className="flex shrink-0 items-center gap-1 sm:gap-2 md:gap-3">
+          <div className="site-tools order-3 ms-auto flex shrink-0 items-center gap-1 sm:gap-2 md:order-none md:ms-0 md:gap-2">
             <div className="hidden shrink-0 md:flex md:items-center">
               <LanguageSwitcher />
             </div>
@@ -329,7 +329,7 @@ export default function NavBarOne() {
 
             {isGuest && (
               <Link href={route("login")} className="hidden sm:block">
-                <Button className="h-9 rounded-2xl px-4 text-sm text-primary hover:bg-brand-pink-soft sm:h-10 sm:px-5" variant="ghost">
+                <Button className="h-9 rounded-full px-4 text-sm text-white hover:bg-white/10 sm:h-10 sm:px-5" variant="ghost">
                   {t("Login")}
                 </Button>
               </Link>
@@ -358,8 +358,8 @@ export default function NavBarOne() {
               <>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="hidden rounded-full text-black hover:bg-brand-pink-soft md:flex">
-                      <HelpCircle className="h-5 w-5 text-black" />
+                    <Button variant="ghost" size="icon" className="hidden rounded-full text-white hover:bg-white/10 md:flex">
+                      <HelpCircle className="h-5 w-5" />
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="w-full max-w-5xl p-8">
@@ -415,7 +415,7 @@ export default function NavBarOne() {
 
       {/* White category nav — sticky with header (mobile + desktop) */}
       {navCategories.length > 0 && (
-        <div className="relative border-t border-brand-border/80 bg-white">
+        <div className="relative border-t border-white/10 bg-[#0B0B0C]">
           <div className="mx-auto w-full max-w-[1920px] px-3 sm:px-4 lg:px-8">
             <nav
               aria-label={t("Categories")}
@@ -450,8 +450,8 @@ export default function NavBarOne() {
                         className={cn(
                           "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors sm:px-3.5 sm:py-2 sm:text-sm",
                           open || onPage
-                            ? "bg-brand-pink-soft text-brand-dark"
-                            : "text-brand-text hover:bg-zinc-50 hover:text-primary",
+                            ? "text-[#D9B08C]"
+                            : "text-white/70 hover:text-white",
                         )}
                       >
                         {cat.name}
@@ -470,8 +470,8 @@ export default function NavBarOne() {
                         className={cn(
                           "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors sm:px-3.5 sm:py-2 sm:text-sm",
                           onPage
-                            ? "bg-brand-pink-soft text-brand-dark"
-                            : "text-brand-text hover:bg-zinc-50 hover:text-primary",
+                            ? "text-[#D9B08C]"
+                            : "text-white/70 hover:text-white",
                         )}
                       >
                         {cat.name}
@@ -483,7 +483,7 @@ export default function NavBarOne() {
               <Link
                 href="/categories"
                 onClick={closeCategories}
-                className="shrink-0 px-2 py-1.5 text-xs font-semibold text-primary hover:text-brand-dark sm:px-3 sm:py-2 sm:text-sm"
+                className="shrink-0 px-2 py-1.5 text-xs font-medium text-[#D9B08C] hover:text-white sm:px-3 sm:py-2 sm:text-sm"
               >
                 {t("View all categories")}
               </Link>
@@ -501,7 +501,7 @@ export default function NavBarOne() {
                 onClick={closeCategories}
               />
               <div
-                className="absolute inset-x-0 top-full z-[60] border-t border-brand-border bg-white shadow-soft"
+                className="absolute inset-x-0 top-full z-[60] border-t border-brand-border bg-background shadow-soft"
                 onMouseEnter={() => {
                   if (!isMobileViewport) setActiveNavCategoryId(activeNavCategory.id);
                 }}

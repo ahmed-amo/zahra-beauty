@@ -8,9 +8,9 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 
 /**
- * Modest womenswear stand-in catalog. Illustrations live in public/zahra
- * (no model photos). The first boot hides the previous baby catalog; later
- * boots only refresh these rows so products added in admin stay published.
+ * Modest womenswear mock catalog. Photos live in public/zahra/photos.
+ * The first boot hides the previous baby catalog; later boots refresh
+ * these rows and unpublish Zahra rows that left the catalog.
  */
 final class ZahraCatalog
 {
@@ -22,17 +22,18 @@ final class ZahraCatalog
     public static function categories(): array
     {
         return [
-            ['name' => 'Robes', 'image' => 'zahra/robe-sauge.svg', 'children' => []],
-            ['name' => 'Abayas', 'image' => 'zahra/abaya-olive.svg', 'children' => []],
-            ['name' => 'Ensembles', 'image' => 'zahra/ensemble-ivoire.svg', 'children' => []],
-            ['name' => 'Hijabs', 'image' => 'zahra/hijab-noir.svg', 'children' => []],
-            ['name' => 'Manteaux', 'image' => 'zahra/robe-camel.svg', 'children' => []],
-            ['name' => 'Accessoires', 'image' => 'zahra/hijab-or.svg', 'children' => []],
+            ['name' => 'Robes', 'image' => 'zahra/photos/robe-sauge.jpg', 'children' => []],
+            ['name' => 'Abayas', 'image' => 'zahra/photos/abaya-olive.jpg', 'children' => []],
+            ['name' => 'Ensembles', 'image' => 'zahra/photos/ensemble-beige.jpg', 'children' => []],
+            ['name' => 'Hijabs', 'image' => 'zahra/photos/hijab-ivoire.jpg', 'children' => []],
+            ['name' => 'Manteaux', 'image' => 'zahra/photos/manteau-camel.jpg', 'children' => []],
+            ['name' => 'Accessoires', 'image' => 'zahra/photos/sac-tresse.jpg', 'children' => []],
+            ['name' => 'Packs', 'image' => 'zahra/photos/pack-universitaire.jpg', 'children' => []],
         ];
     }
 
     /**
-     * @return list<array{slug: string, category: string, name: string, description: string, price: int, compare_at_price: int|null, stock: int, image: string, hero: int|null}>
+     * @return list<array{slug: string, category: string, name: string, description: string, price: int, compare_at_price: int|null, stock: int, image: string, gallery: list<string>, hero: int|null}>
      */
     public static function products(): array
     {
@@ -41,88 +42,153 @@ final class ZahraCatalog
                 'slug' => 'robe-drapee-sauge',
                 'category' => 'robes',
                 'name' => 'Robe drapée Sauge',
-                'description' => 'Robe longue modeste, taille drapée et manches amples. Coupe intemporelle pour le quotidien.',
+                'description' => 'Robe longue sauge, taille drapée et manches amples, portée avec un hijab ivoire. La pièce rue de la collection.',
                 'price' => 8900,
                 'compare_at_price' => 10900,
                 'stock' => 18,
-                'image' => 'zahra/robe-sauge.svg',
+                'image' => 'zahra/photos/robe-sauge.jpg',
+                'gallery' => ['zahra/photos/robe-sauge.jpg', 'zahra/photos/sac-tresse.jpg'],
                 'hero' => 1,
             ],
             [
-                'slug' => 'abaya-noeud-olive',
-                'category' => 'abayas',
-                'name' => 'Abaya nouée Olive',
-                'description' => 'Abaya fluide à nouer, tombé long et matière légère. Une pièce signature de la collection.',
-                'price' => 12900,
-                'compare_at_price' => null,
+                'slug' => 'robe-ruchee-noire',
+                'category' => 'robes',
+                'name' => 'Robe ruchée Noire',
+                'description' => 'Robe noire à taille lacée et tombé fluide, pensée pour le soir. Hijab beige compris dans le look.',
+                'price' => 9800,
+                'compare_at_price' => 11800,
                 'stock' => 14,
-                'image' => 'zahra/abaya-olive.svg',
+                'image' => 'zahra/photos/robe-noire.jpg',
+                'gallery' => ['zahra/photos/robe-noire.jpg', 'zahra/photos/hijab-noir.jpg'],
                 'hero' => 2,
             ],
             [
-                'slug' => 'robe-plissee-camel',
-                'category' => 'robes',
-                'name' => 'Robe plissée Camel',
-                'description' => 'Robe de saison en camel, ceinture fine et jupe plissée. Élégance discrète.',
-                'price' => 9800,
-                'compare_at_price' => 11800,
-                'stock' => 16,
-                'image' => 'zahra/robe-camel.svg',
+                'slug' => 'abaya-nouee-olive',
+                'category' => 'abayas',
+                'name' => 'Abaya nouée Olive',
+                'description' => 'Abaya olive fluide, ouverte sur une robe assortie. Hijab sable, coupe couvrante.',
+                'price' => 12900,
+                'compare_at_price' => null,
+                'stock' => 12,
+                'image' => 'zahra/photos/abaya-olive.jpg',
+                'gallery' => ['zahra/photos/abaya-olive.jpg'],
                 'hero' => 3,
             ],
             [
-                'slug' => 'robe-longue-sable',
-                'category' => 'robes',
-                'name' => 'Robe longue Sable',
-                'description' => 'Robe chemise longue couleur sable, col montant et manches boutonnées.',
-                'price' => 9200,
-                'compare_at_price' => null,
-                'stock' => 20,
-                'image' => 'zahra/robe-sable.svg',
-                'hero' => null,
-            ],
-            [
-                'slug' => 'abaya-soiree-noire',
-                'category' => 'abayas',
-                'name' => 'Abaya soirée Noire',
-                'description' => 'Abaya noire à liseré doré, pensée pour les sorties. Coupe couvrante et raffinée.',
-                'price' => 14900,
-                'compare_at_price' => null,
-                'stock' => 10,
-                'image' => 'zahra/abaya-noire.svg',
-                'hero' => null,
-            ],
-            [
-                'slug' => 'ensemble-modestie-ivoire',
+                'slug' => 'ensemble-beige-campus',
                 'category' => 'ensembles',
-                'name' => 'Ensemble modestie Ivoire',
-                'description' => 'Ensemble deux pièces ivoire : tunique et jupe longue, facile à porter en couche.',
+                'name' => 'Ensemble beige Campus',
+                'description' => 'Robe longue beige et hijab assorti. Le haut du pack entrée universitaire.',
                 'price' => 11200,
                 'compare_at_price' => null,
-                'stock' => 12,
-                'image' => 'zahra/ensemble-ivoire.svg',
+                'stock' => 16,
+                'image' => 'zahra/photos/ensemble-beige.jpg',
+                'gallery' => ['zahra/photos/ensemble-beige.jpg'],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'hijab-mousseline-ivoire',
+                'category' => 'hijabs',
+                'name' => 'Hijab mousseline Ivoire',
+                'description' => 'Mousseline ivoire, tombé léger et fini propre. Se porte avec les robes sauge et beige.',
+                'price' => 1800,
+                'compare_at_price' => 2400,
+                'stock' => 48,
+                'image' => 'zahra/photos/hijab-ivoire.jpg',
+                'gallery' => ['zahra/photos/hijab-ivoire.jpg'],
                 'hero' => null,
             ],
             [
                 'slug' => 'hijab-satin-noir',
                 'category' => 'hijabs',
                 'name' => 'Hijab satin Noir',
-                'description' => 'Hijab satin noir, tombé souple et fini propre. Se porte seul ou sous un manteau.',
+                'description' => 'Satin noir à reflet doux. Le hijab du pack soirée.',
                 'price' => 2200,
                 'compare_at_price' => 2800,
                 'stock' => 40,
-                'image' => 'zahra/hijab-noir.svg',
+                'image' => 'zahra/photos/hijab-noir.jpg',
+                'gallery' => ['zahra/photos/hijab-noir.jpg'],
                 'hero' => null,
             ],
             [
-                'slug' => 'hijab-soie-or',
-                'category' => 'accessoires',
-                'name' => 'Hijab soie Or',
-                'description' => 'Foulard doré léger, l’accent de la maison. À porter avec une robe noire ou ivoire.',
-                'price' => 2600,
+                'slug' => 'manteau-laine-camel',
+                'category' => 'manteaux',
+                'name' => 'Manteau laine Camel',
+                'description' => 'Manteau long camel, à porter sur une robe modeste et un hijab noir.',
+                'price' => 14900,
                 'compare_at_price' => null,
-                'stock' => 36,
-                'image' => 'zahra/hijab-or.svg',
+                'stock' => 9,
+                'image' => 'zahra/photos/manteau-camel.jpg',
+                'gallery' => ['zahra/photos/manteau-camel.jpg'],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'sac-main-tresse',
+                'category' => 'accessoires',
+                'name' => 'Sac main tressé',
+                'description' => 'Petit sac en paille tressée, l’accessoire de la robe sauge.',
+                'price' => 3200,
+                'compare_at_price' => null,
+                'stock' => 22,
+                'image' => 'zahra/photos/sac-tresse.jpg',
+                'gallery' => ['zahra/photos/sac-tresse.jpg'],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'sneakers-blanches-campus',
+                'category' => 'accessoires',
+                'name' => 'Sneakers blanches Campus',
+                'description' => 'Baskets basses blanches, semelle propre. Incluses dans le pack entrée universitaire.',
+                'price' => 4500,
+                'compare_at_price' => 5200,
+                'stock' => 30,
+                'image' => 'zahra/photos/sneakers-blanches.jpg',
+                'gallery' => ['zahra/photos/sneakers-blanches.jpg'],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'sac-a-dos-cuir',
+                'category' => 'accessoires',
+                'name' => 'Sac à dos cuir',
+                'description' => 'Sac à dos rabat cuir marron et corps écru. La pièce cartable du pack campus.',
+                'price' => 6200,
+                'compare_at_price' => null,
+                'stock' => 15,
+                'image' => 'zahra/photos/sac-dos.jpg',
+                'gallery' => ['zahra/photos/sac-dos.jpg'],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'pack-entree-universitaire',
+                'category' => 'packs',
+                'name' => 'Pack entrée universitaire',
+                'description' => 'Le look rentrée : robe beige et hijab, sneakers blanches et sac à dos cuir. Vendu ensemble, moins cher que les pièces séparées.',
+                'price' => 18900,
+                'compare_at_price' => 21900,
+                'stock' => 8,
+                'image' => 'zahra/photos/pack-universitaire.jpg',
+                'gallery' => [
+                    'zahra/photos/pack-universitaire.jpg',
+                    'zahra/photos/ensemble-beige.jpg',
+                    'zahra/photos/sneakers-blanches.jpg',
+                    'zahra/photos/sac-dos.jpg',
+                ],
+                'hero' => null,
+            ],
+            [
+                'slug' => 'pack-soiree-noire',
+                'category' => 'packs',
+                'name' => 'Pack soirée Noire',
+                'description' => 'Robe ruchée noire, hijab satin noir et boucles dorées. Un look complet pour les sorties.',
+                'price' => 12400,
+                'compare_at_price' => 14600,
+                'stock' => 10,
+                'image' => 'zahra/photos/pack-soiree.jpg',
+                'gallery' => [
+                    'zahra/photos/pack-soiree.jpg',
+                    'zahra/photos/robe-noire.jpg',
+                    'zahra/photos/hijab-noir.jpg',
+                ],
                 'hero' => null,
             ],
         ];
@@ -183,33 +249,45 @@ final class ZahraCatalog
             }
 
             $product = Product::query()->firstOrNew(['slug' => $item['slug']]);
-            $image = $item['image'];
-            $isNew = ! $product->exists;
+            $gallery = array_map(
+                fn (string $path) => '/'.ltrim($path, '/'),
+                $item['gallery'] ?? [$item['image']],
+            );
 
-            if ($isNew) {
-                $product->fill([
-                    'name' => $item['name'],
-                    'slug' => $item['slug'],
-                    'description' => $item['description'],
-                    'brand' => 'Zahra',
-                    'price' => $item['price'],
-                    'compare_at_price' => $item['compare_at_price'],
-                    'sale_enabled' => false,
-                    'sale_price' => null,
-                    'sale_starts_at' => null,
-                    'sale_ends_at' => null,
-                    'stock' => $item['stock'],
-                    'has_variants' => false,
-                    'hero_sort_order' => $item['hero'],
-                    'image' => $image,
-                    'gallery_urls' => ['/'.$image],
-                ]);
-            }
-
-            $product->category_id = $category->id;
-            $product->import_source = self::SOURCE;
-            $product->status = true;
+            $product->fill([
+                'name' => $item['name'],
+                'slug' => $item['slug'],
+                'description' => $item['description'],
+                'brand' => 'Zahra',
+                'price' => $item['price'],
+                'compare_at_price' => $item['compare_at_price'],
+                'sale_enabled' => false,
+                'sale_price' => null,
+                'sale_starts_at' => null,
+                'sale_ends_at' => null,
+                'stock' => $item['stock'],
+                'has_variants' => false,
+                'hero_sort_order' => $item['hero'],
+                'image' => $item['image'],
+                'gallery_urls' => $gallery,
+                'category_id' => $category->id,
+                'import_source' => self::SOURCE,
+                'status' => true,
+            ]);
             $product->save();
         }
+
+        Product::query()
+            ->where('import_source', self::SOURCE)
+            ->whereNotIn('slug', array_column(self::products(), 'slug'))
+            ->each(function (Product $retired) {
+                $retired->status = false;
+                $retired->hero_sort_order = null;
+                $retired->save();
+
+                if (str_ends_with((string) $retired->image, '.svg') || preg_match('/-\d+$/', $retired->slug)) {
+                    $retired->delete();
+                }
+            });
     }
 }

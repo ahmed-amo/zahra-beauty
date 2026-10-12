@@ -46,7 +46,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
     <AppProviders>
 
-            <div dir={direction} className="dashboard-theme relative flex h-screen overflow-hidden bg-white text-zinc-900 dark:bg-gray-950 dark:text-zinc-100">
+            <div dir={direction} className="dashboard-theme relative flex h-dvh overflow-hidden bg-background text-foreground">
           {/* Decorative Orange Waves Background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Wave 1 */}

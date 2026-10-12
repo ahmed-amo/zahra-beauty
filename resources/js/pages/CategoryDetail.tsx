@@ -319,15 +319,15 @@ export default function CategoryDetail() {
           {/* Products Grid */}
           <div className="lg:col-span-3">
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
                 {filteredProducts.map((product) => (
                   <div key={product.id} className="group relative">
                     <Link href={`/product/${product.slug}`} className="block">
-                      <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 mb-4">
+                      <div className="media-frame relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#f4f1ea] sm:mb-4">
                         <img
                           src={getProductImage(product)}
                           alt={product.name}
-                          className="h-full w-full object-cover transition-all duration-300 group-hover:scale-105"
+                          className="h-full w-full object-contain p-1.5 sm:p-2"
                           onError={(e) => { const target = e.target as HTMLImageElement; target.src = '/placeholder.jpg' }}
                         />
                         {!product.in_stock && (

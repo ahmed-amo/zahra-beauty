@@ -10,7 +10,7 @@ export default function ShopFrontLayout({children}: {children: ReactNode}) {
   return (
 
     <AppProviders>
-      <div dir={direction} lang={locale} className="shop-theme min-h-[100dvh] bg-background text-foreground">
+      <div dir={direction} lang={locale} className="shop-theme min-h-[100dvh] overflow-x-clip bg-background text-foreground">
         <ShopHeader />
           {children}
         <ShopFooter />

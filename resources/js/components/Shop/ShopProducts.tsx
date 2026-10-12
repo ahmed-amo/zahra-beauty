@@ -64,7 +64,7 @@ const ProductCard = memo(function ProductCard({
     >
       <Link href={`/product/${product.slug ?? product.id}`} className="relative block">
         {product.is_on_sale && (product.discount_percentage ?? 0) > 0 && (
-          <span className="absolute start-2 top-2 z-20 rounded-xl bg-secondary px-2.5 py-1 text-xs font-bold text-white shadow-card">
+          <span className="absolute start-2 top-2 z-20 rounded-xl bg-secondary px-2.5 py-1 text-xs font-bold text-secondary-foreground shadow-card">
             -{product.discount_percentage}%
           </span>
         )}
@@ -74,7 +74,7 @@ const ProductCard = memo(function ProductCard({
           alt={product.name}
           loading="lazy"
           decoding="async"
-          className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-56"
+          className="media-frame aspect-[3/4] w-full bg-[#f4f1ea] object-contain p-1 transition-transform duration-300 group-hover:scale-[1.02] sm:p-2"
           onError={(e) => {
             const t = e.target as HTMLImageElement;
             t.src = PLACEHOLDER;
@@ -191,7 +191,7 @@ function ShopProductsInner({ products }: { products: Product[] | { data: Product
       >
         <Link
           href="/products"
-          className="inline-flex w-full max-w-sm items-center justify-center rounded-2xl bg-primary px-6 py-3 text-base font-semibold text-white shadow-soft transition-all duration-300 hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto sm:max-w-none sm:px-8 touch-manipulation"
+          className="inline-flex w-full max-w-sm touch-manipulation items-center justify-center rounded-2xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-soft transition-all duration-300 hover:bg-brand-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 sm:w-auto sm:max-w-none sm:px-8"
         >
           {t("View all products")}
         </Link>

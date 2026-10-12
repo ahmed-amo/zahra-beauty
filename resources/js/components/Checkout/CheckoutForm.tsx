@@ -201,7 +201,7 @@ export default function CheckoutForm({
 
   const inputCls = (field: string) =>
     cn(
-      "h-11 rounded-xl border-gray-200 !bg-white !text-zinc-900 caret-zinc-900 placeholder:!text-zinc-500 focus:ring-1 [color-scheme:light]",
+      "h-11 rounded-xl border-border bg-card text-foreground caret-foreground placeholder:text-muted-foreground focus:ring-1",
       pickFieldError(errors, field)
         ? "border-red-400 focus:border-red-400 focus:ring-red-200"
         : "focus:border-brand-pink focus:ring-brand-pink",
@@ -209,7 +209,7 @@ export default function CheckoutForm({
 
   const selectCls = (field: string) =>
     cn(
-      "h-11 w-full rounded-xl border bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-1",
+      "h-11 w-full rounded-xl border bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-1",
       pickFieldError(errors, field)
         ? "border-red-400 focus:border-red-400 focus:ring-red-200"
         : "border-gray-200 focus:border-brand-pink focus:ring-brand-pink",
@@ -220,7 +220,7 @@ export default function CheckoutForm({
       onSubmit={handleSubmit}
       dir={direction}
       className={cn(
-        "space-y-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6",
+        "space-y-4 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-6",
         compact && "p-3 sm:p-4",
         className,
       )}
@@ -345,7 +345,7 @@ export default function CheckoutForm({
                   "flex items-center gap-2 rounded-xl border px-3 py-3 text-sm font-semibold transition",
                   active
                     ? "border-primary bg-brand-pink-soft text-primary"
-                    : "border-gray-200 bg-white text-zinc-700 hover:border-gray-300",
+                    : "border-border bg-muted text-foreground hover:border-primary/40",
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0" />

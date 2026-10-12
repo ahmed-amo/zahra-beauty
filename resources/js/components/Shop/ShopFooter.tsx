@@ -15,7 +15,7 @@ export default function FooterV2() {
           </p>
         </div>
         <div className="space-y-3">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C6A15B]">{t("Shop")}</h3>
+          <h3 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-[#D9B08C]">{t("Shop")}</h3>
           <nav className="flex flex-col gap-2 text-sm text-white/80">
             <Link href="/" className="hover:text-white">{t("Home")}</Link>
             <Link href="/products" className="hover:text-white">{t("New collection")}</Link>
@@ -25,7 +25,7 @@ export default function FooterV2() {
           </nav>
         </div>
         <div className="space-y-3">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C6A15B]">{t("Maison")}</h3>
+          <h3 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-[#D9B08C]">{t("Maison")}</h3>
           <p className="text-sm text-white/80">hello@zahra.style</p>
           <p className="text-sm text-white/80">Algeria</p>
         </div>

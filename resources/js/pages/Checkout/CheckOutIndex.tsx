@@ -50,7 +50,7 @@ function CheckoutPageContent({ wilayas = [] }: CheckoutPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafaf9]">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -58,8 +58,8 @@ function CheckoutPageContent({ wilayas = [] }: CheckoutPageProps) {
           </div>
 
           <aside className="lg:col-span-2">
-            <div className="sticky top-24 space-y-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-              <h3 className="text-lg font-bold text-zinc-900">{t("checkout.order_summary")}</h3>
+            <div className="space-y-4 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-5 lg:sticky lg:top-24">
+              <h3 className="text-lg font-bold text-foreground">{t("checkout.order_summary")}</h3>
               <ul className="max-h-72 space-y-3 overflow-y-auto">
                 {cartItems.map((item) => (
                   <li

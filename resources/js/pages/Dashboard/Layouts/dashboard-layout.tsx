@@ -53,7 +53,7 @@ export default function DashboardLayout({
 
   return (
     <AppProviders>
-      <div dir={direction} className="dashboard-theme relative flex h-screen overflow-hidden bg-white dark:bg-gray-950">
+      <div dir={direction} className="dashboard-theme relative flex h-dvh overflow-hidden bg-background text-foreground">
         {/* Decorative Orange Waves Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-gradient-to-br from-primary/20 to-brand-pink/10 rounded-full blur-3xl"></div>

@@ -36,7 +36,7 @@ class HomeController extends Controller
             ->withShopReviewStats()
             ->where('status', true)
             ->latest()
-            ->limit(8)
+            ->limit(12)
             ->get()
             ->map(fn (Product $product) => $product->toShopFrontArray())
             ->values();

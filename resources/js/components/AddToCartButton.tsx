@@ -78,9 +78,9 @@ export default function AddToCartButton({
   const isCompact = layout === 'compact';
 
   const compactBtnClass = cn(
-    'h-10 min-w-0 gap-1 rounded-none px-2 text-xs font-semibold text-white shadow-none sm:gap-1.5 sm:px-3 sm:text-sm',
+    'h-10 min-w-0 gap-1 rounded-none px-2 text-xs font-semibold shadow-none sm:gap-1.5 sm:px-3 sm:text-sm',
     'whitespace-nowrap overflow-hidden has-[>svg]:px-2 sm:has-[>svg]:px-3',
-    justAdded ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-primary hover:bg-brand-dark',
+    justAdded ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-primary text-primary-foreground hover:bg-brand-dark',
   );
 
   const Label = ({ long, short }: { long: string; short: string }) => (

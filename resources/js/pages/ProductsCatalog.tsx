@@ -167,7 +167,7 @@ export default function ProductsCatalog() {
         </div>
 
         {!showProducts ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {categories.map((category, index) => {
               const image = categoryImageSrc(category)
               const gradient = CATEGORY_GRADIENTS[index % CATEGORY_GRADIENTS.length]
@@ -179,7 +179,7 @@ export default function ProductsCatalog() {
                   onClick={() => visitCatalog({ category: category.slug })}
                   className="group overflow-hidden rounded-2xl border border-gray-100 bg-white text-start shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  <div className="relative aspect-[16/9] overflow-hidden">
+                  <div className="relative aspect-[3/4] overflow-hidden sm:aspect-[4/5]">
                     {image ? (
                       <img
                         src={image}
@@ -193,8 +193,8 @@ export default function ProductsCatalog() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-5">
-                      <h2 className="text-2xl font-bold text-white">{category.name}</h2>
+                    <div className="absolute inset-x-0 bottom-0 p-3 sm:p-5">
+                      <h2 className="text-base font-bold text-white sm:text-2xl">{category.name}</h2>
                       {category.description ? (
                         <p className="mt-1 line-clamp-2 text-sm text-white/85">{category.description}</p>
                       ) : null}
@@ -227,15 +227,15 @@ export default function ProductsCatalog() {
               </button>
             ) : null}
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
               {products.data.map((product) => (
                 <article key={product.id} className="group relative flex flex-col">
                   <Link href={`/product/${product.slug}`} className="block">
-                    <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
+                    <div className="media-frame relative mb-3 aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#f4f1ea]">
                       <img
                         src={getProductImage(product)}
                         alt={product.name}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        className="h-full w-full object-contain p-1.5 transition duration-300 sm:p-2"
                         loading="lazy"
                         onError={(e) => {
                           ;(e.target as HTMLImageElement).src = "/placeholder.jpg"

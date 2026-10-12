@@ -170,7 +170,7 @@ export default function ProductDetail({ product, category, saleProducts = [] }: 
 
   return (
     <ShopFrontLayout>
-      <div className="mx-auto max-w-7xl bg-white px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+      <div className="mx-auto max-w-7xl bg-background px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm">
           <Link href="/" className="text-gray-500 hover:text-gray-700">
             {t("Home")}
@@ -193,7 +193,7 @@ export default function ProductDetail({ product, category, saleProducts = [] }: 
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 shadow-md ring-1 ring-gray-200/80">
+            <div className="media-frame relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#f4f1ea] shadow-md ring-1 ring-border sm:aspect-[4/5]">
               {displayOnSale && (displayDiscount ?? 0) > 0 && (
                 <span className="absolute start-3 top-3 z-10 rounded-md bg-red-600 px-2.5 py-1 text-xs font-bold text-white shadow-lg">
                   {t("SALE")} −{displayDiscount}%
@@ -205,7 +205,7 @@ export default function ProductDetail({ product, category, saleProducts = [] }: 
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
-                className="w-full h-full object-cover transition-all duration-300 hover:scale-105"
+                className="h-full w-full object-contain p-2 transition-all duration-300 sm:p-4"
               />
             </div>
 
@@ -216,13 +216,13 @@ export default function ProductDetail({ product, category, saleProducts = [] }: 
                     key={i}
                     type="button"
                     onClick={() => setSelectedImage(i)}
-                    className={`relative h-[4.5rem] w-[4.5rem] shrink-0 overflow-hidden rounded-xl transition-shadow ${
+                    className={`media-frame relative h-20 w-16 shrink-0 overflow-hidden rounded-xl bg-[#f4f1ea] transition-shadow sm:h-24 sm:w-20 ${
                       selectedImage === i
-                        ? "ring-2 ring-primary ring-offset-2 ring-offset-white shadow-md"
-                        : "ring-1 ring-gray-200 opacity-90 hover:opacity-100"
+                        ? "ring-2 ring-primary ring-offset-2 ring-offset-background shadow-md"
+                        : "ring-1 ring-border opacity-90 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="h-full w-full object-cover" />
+                    <img src={img} alt="" className="h-full w-full object-contain p-1" />
                   </button>
                 ))}
               </div>
@@ -261,7 +261,7 @@ export default function ProductDetail({ product, category, saleProducts = [] }: 
             </div>
 
             {/* Price row — on mobile: price left, add-to-cart button right */}
-            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+            <div className="rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-sm sm:p-6">
               <div className="flex items-center justify-between gap-3 rtl:flex-row-reverse">
                 {/* Price */}
                 <div className="min-w-0">

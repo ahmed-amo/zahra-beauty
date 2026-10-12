@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ]
 
   return (
-    <div dir={direction} className="dashboard-theme relative flex h-screen overflow-hidden bg-background text-foreground">
+    <div dir={direction} className="dashboard-theme relative flex h-dvh overflow-hidden bg-background text-foreground">
       {/* Accents only in dark mode — light stays clean white */}
       <div className="pointer-events-none absolute inset-0 hidden overflow-hidden dark:block">
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-gradient-to-br from-primary/15 to-secondary/10 blur-3xl" />

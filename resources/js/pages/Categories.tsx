@@ -26,7 +26,7 @@ export default function Categories({ categories }: Props) {
 
   return (
     <ShopFrontLayout>
-      <div className="w-full bg-gray-50 px-4 py-12 md:px-8">
+      <div className="w-full bg-background px-3 py-8 sm:px-4 sm:py-12 md:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 text-center">
             <h2 className="mb-3 text-3xl font-bold text-gray-900">
@@ -37,7 +37,7 @@ export default function Categories({ categories }: Props) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
             {categories.map((category, idx) => {
               const children = category.children ?? [];
               const visible = children.slice(0, MAX_VISIBLE_CHILDREN);
@@ -56,7 +56,7 @@ export default function Categories({ categories }: Props) {
                 >
                   <Link
                     href={`/category/${category.slug}`}
-                    className="relative block aspect-[16/10] overflow-hidden"
+                    className="relative block aspect-[3/4] overflow-hidden sm:aspect-[4/5]"
                   >
                     <img
                       src={imageFor(category)}
@@ -70,7 +70,7 @@ export default function Categories({ categories }: Props) {
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent" />
 
                     <div className="absolute inset-x-0 bottom-0 p-5">
-                      <h3 className="text-2xl font-bold text-white">{category.name}</h3>
+                      <h3 className="text-base font-bold text-white sm:text-2xl">{category.name}</h3>
                       {category.description && (
                         <p className="mt-1 line-clamp-2 text-sm text-white/80">
                           {category.description}

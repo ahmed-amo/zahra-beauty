@@ -25,7 +25,7 @@
                 background-color: #ffffff;
             }
             html.dark {
-                background-color: #09090b;
+                background-color: #111111;
             }
         </style>
 
@@ -46,7 +46,7 @@
         @vite('resources/js/app.tsx')
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 @if(app()->getLocale() === 'ar') font-arabic @endif">
+    <body class="font-sans antialiased bg-background text-foreground @if(app()->getLocale() === 'ar') font-arabic @endif">
         @inertia
     </body>
 </html>
