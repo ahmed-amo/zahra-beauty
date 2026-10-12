@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Generate docs/BeBeDome-Documentation.pdf from the HTML template.
+ * Usage: php docs/generate-pdf.php
+ */
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$app = require __DIR__ . '/../bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+$html = file_get_contents(__DIR__ . '/documentation-pdf.html');
+$out = __DIR__ . '/BeBeDome-Documentation.pdf';
+
+$pdf = Barryvdh\DomPDF\Facade\Pdf::loadHTML($html)
+    ->setPaper('a4')
+    ->setOption('isRemoteEnabled', false);
+
+$pdf->save($out);
+
+echo "OK: {$out}\n";

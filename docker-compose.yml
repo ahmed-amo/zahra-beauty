@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+      target: production
+    container_name: bebe_dome_app
+    restart: unless-stopped
+    ports:
+      - "8000:8080"
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: ${APP_KEY}
+      PORT: "8080"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-bebe_dome}
+      DB_USERNAME: ${DB_USERNAME:-bebe_dome}
+      DB_PASSWORD: ${DB_PASSWORD:-zmartcs123}
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: bebe_dome_db
+    restart: unless-stopped
+    ports:
+      # 5433 avoids conflict with a local Windows Postgres on 5432
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-bebe_dome}
+      POSTGRES_USER: ${DB_USERNAME:-bebe_dome}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-zmartcs123}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-bebe_dome} -d ${DB_DATABASE:-bebe_dome}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:

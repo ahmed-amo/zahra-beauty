@@ -1,0 +1,392 @@
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { cn } from "@/lib/utils";
+import {
+  ChevronRight,
+  ChevronLeft,
+  Eye,
+  Tag,
+} from "lucide-react";
+import { Link } from "@inertiajs/react";
+import ProductBuyRow from "@/components/ProductBuyRow";
+import FavoriteButton from "@/components/FavoriteButton";
+import { motion } from "framer-motion";
+import { slideUp } from "@/lib/motionVariants";
+import { useI18n } from "@/lib/i18n";
+
+type SalesProduct = {
+  id: number;
+  name: string;
+  slug: string;
+  originalPrice: number;
+  price: number; // discounted price
+  discountPercentage: number;
+  description: string;
+  image_url: string | null;
+  category: string | null;
+  rating: number;
+  stock: number;
+  favorite?: boolean;
+};
+
+// Star rating component
+const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+  return (
+    <div className="flex items-center rtl:flex-row-reverse">
+      {[...Array(5)].map((_, i) => (
+        <svg
+          key={i}
+          className={`w-3 h-3 ${
+            i < Math.floor(rating)
+              ? "text-brand-warning"
+              : i < rating
+              ? "text-brand-warning"
+              : "text-gray-300"
+          }`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
+        </svg>
+      ))}
+      <span className="ms-1 text-xs text-gray-600 tabular-nums">{rating.toFixed(1)}</span>
+    </div>
+  );
+};
+
+// Product Card Component with discount
+const ProductCard: React.FC<{
+  product: SalesProduct;
+}> = ({ product }) => {
+  const { t, formatPrice } = useI18n();
+  const placeholder = "/placeholder.jpg";
+  const imageUrl = product.image_url || placeholder;
+
+  return (
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-colors duration-300 hover:border-gray-200">
+      {/* Image container with aspect ratio */}
+      <div className="relative w-full pb-[100%] bg-gray-50 overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={product.name}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = placeholder;
+          }}
+        />
+
+        {/* Badges */}
+        <div className="absolute start-3 top-3 flex flex-col gap-2">
+          {product.discountPercentage > 0 && (
+            <span className="rounded-lg bg-red-500 px-2 py-1 text-xs font-bold text-white shadow-sm">
+              {t("sale.discount.label").replace("{n}", String(product.discountPercentage))}
+            </span>
+          )}
+          {product.stock <= 10 && product.stock > 0 && (
+            <span className="rounded-lg bg-brand-pink-soft0 px-2 py-1 text-xs font-bold text-white shadow-sm">
+              {t("stock.only.n.left").replace("{n}", String(product.stock))}
+            </span>
+          )}
+          {product.stock === 0 && (
+            <span className="rounded-lg bg-gray-500 px-2 py-1 text-xs font-bold text-white shadow-sm">
+              {t("Out of Stock")}
+            </span>
+          )}
+        </div>
+
+        {/* Favorite — always visible for touch */}
+        <div className="absolute end-3 top-3 z-10">
+          <FavoriteButton
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image: imageUrl,
+              description: product.description || "",
+              category: product.category || "",
+              slug: product.slug,
+            }}
+            variant="icon"
+            className="rounded-full bg-white/90 shadow-sm hover:bg-white"
+          />
+        </div>
+
+        {/* Quick actions overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 flex gap-2">
+            <Link
+              href={`/product/${product.slug}`}
+              className="flex items-center gap-1 rounded-lg bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-md transition-colors duration-200 hover:bg-gray-100 rtl:flex-row-reverse"
+            >
+              <Eye size={16} />
+              <span>{t("Quick View")}</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Product details */}
+      <div className="flex flex-grow flex-col p-4">
+        <div className="mb-1 text-start">
+          <span className="text-xs font-medium uppercase tracking-wider text-gray-500">
+            {product.category || t("Uncategorized")}
+          </span>
+          <h3 className="mt-1 line-clamp-1 text-sm font-medium text-gray-900">
+            {product.name}
+          </h3>
+        </div>
+
+        <div className="mt-1 mb-3">
+          <StarRating rating={product.rating} />
+        </div>
+
+        <p className="mb-3 line-clamp-2 text-start text-xs text-gray-500">
+          {product.description || t("No description available")}
+        </p>
+
+        <div className="mt-auto space-y-2 border-t border-gray-100 pt-3">
+          <div className="flex flex-col text-start">
+            <span className="text-xs text-gray-500 line-through">
+              {formatPrice(product.originalPrice)}
+            </span>
+            <span className="text-lg font-bold text-gray-900">
+              {formatPrice(product.price)}
+            </span>
+          </div>
+          <ProductBuyRow
+            product={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image: imageUrl,
+              description: product.description || "",
+              category: product.category || "",
+              stock: product.stock,
+              in_stock: product.stock > 0,
+            }}
+            disabled={product.stock === 0}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Carousel Component
+interface ShopSalesProps {
+  products?: SalesProduct[];
+  /** Use on product detail: no duplicate max-width / horizontal padding. */
+  embedded?: boolean;
+}
+
+const ProductTwo: React.FC<ShopSalesProps> = ({ products: propsProducts = [], embedded = false }) => {
+  const { t, direction } = useI18n();
+  const isRtl = direction === "rtl";
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleProducts, setVisibleProducts] = useState(4);
+  const [mobileGrid, setMobileGrid] = useState(false);
+  const [isInView, setIsInView] = useState(true);
+  const [isPageVisible, setIsPageVisible] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const products: SalesProduct[] = propsProducts;
+
+  // Mobile: 2×2 grid (4 products). Tablet/desktop: horizontal carousel.
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setVisibleProducts(4);
+        setMobileGrid(false);
+      } else if (window.innerWidth >= 1024) {
+        setVisibleProducts(3);
+        setMobileGrid(false);
+      } else if (window.innerWidth >= 768) {
+        setVisibleProducts(2);
+        setMobileGrid(false);
+      } else {
+        setVisibleProducts(4);
+        setMobileGrid(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Pause autoplay when the carousel is off-screen or the tab is hidden.
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.15 },
+    );
+    observer.observe(el);
+
+    const onVisibility = () => setIsPageVisible(document.visibilityState === "visible");
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
+  const step = mobileGrid ? visibleProducts : 1;
+
+  const goToNext = useCallback(() => {
+    if (products.length <= visibleProducts) return;
+    setCurrentIndex((prev) =>
+      prev + step >= products.length - visibleProducts + 1 ? 0 : prev + step
+    );
+  }, [products.length, visibleProducts, step]);
+
+  const goToPrev = () => {
+    if (products.length <= visibleProducts) return;
+    setCurrentIndex((prev) =>
+      prev - step < 0 ? Math.max(0, products.length - visibleProducts) : prev - step
+    );
+  };
+
+
+  // Auto scroll — only while visible on screen and in an active tab
+  useEffect(() => {
+    if (products.length <= visibleProducts || !isInView || !isPageVisible) return;
+    const interval = setInterval(() => {
+      goToNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, products.length, visibleProducts, goToNext, isInView, isPageVisible]);
+
+  // Don't render if no products
+  if (!products || products.length === 0) {
+    return null;
+  }
+
+  const maxIndex = Math.max(0, products.length - visibleProducts);
+  const pageCount = Math.max(1, Math.ceil(products.length / visibleProducts));
+  const currentPage = Math.floor(currentIndex / step);
+
+  return (
+    <motion.div
+      className={cn(
+        "w-full bg-white py-5 md:py-7",
+        embedded
+          ? "max-w-none px-0 sm:rounded-2xl sm:border sm:border-gray-100 sm:bg-gradient-to-b sm:from-gray-50/90 sm:to-white sm:p-5 md:p-6"
+          : "mx-auto max-w-7xl px-3 sm:px-4",
+      )}
+      variants={slideUp}
+      initial="initial"
+      animate="animate"
+    >
+      <div className="mb-4 flex flex-col items-start justify-between gap-3 md:mb-5 md:flex-row md:items-end md:gap-4 rtl:md:flex-row-reverse">
+        <div className="text-start">
+          <div className="mb-2 inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-semibold tracking-wide text-red-600">
+            {t("SPECIAL OFFERS")}
+          </div>
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-gray-900 sm:text-3xl rtl:flex-row-reverse">
+            <Tag className="h-5 w-5 shrink-0 text-red-500 sm:h-6 sm:w-6" aria-hidden />
+            <span className="relative">
+              {t("Spring Sale Collection")}
+              <span className="absolute -bottom-2 start-0 end-0 h-1 rounded-full bg-red-500" />
+            </span>
+          </h2>
+          <p className="mt-2 text-gray-500">
+            {t("Sales section subtitle")}
+          </p>
+        </div>
+
+        {products.length > visibleProducts && (
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={isRtl ? goToNext : goToPrev}
+              className="rounded-full border border-gray-200 bg-white p-3 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow"
+              aria-label={t("Previous products")}
+            >
+              {isRtl ? <ChevronRight size={18} className="text-gray-700" /> : <ChevronLeft size={18} className="text-gray-700" />}
+            </button>
+            <button
+              type="button"
+              onClick={isRtl ? goToPrev : goToNext}
+              className="rounded-full border border-gray-200 bg-white p-3 shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow"
+              aria-label={t("Next products")}
+            >
+              {isRtl ? <ChevronLeft size={18} className="text-gray-700" /> : <ChevronRight size={18} className="text-gray-700" />}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="relative overflow-hidden" ref={carouselRef}>
+        {mobileGrid ? (
+          <div className="grid grid-cols-2 gap-3">
+            {products.slice(currentIndex, currentIndex + visibleProducts).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div style={{ direction: "ltr" }}>
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{
+                transform: `translateX(-${
+                  products.length <= visibleProducts
+                    ? 0
+                    : currentIndex * (100 / visibleProducts)
+                }%)`,
+              }}
+            >
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="w-full flex-shrink-0 px-3 md:w-1/2 lg:w-1/3 xl:w-1/4"
+                  style={{ direction: isRtl ? "rtl" : "ltr" }}
+                >
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Pagination dots */}
+      {products.length > visibleProducts && (
+        <div className="mt-4 flex justify-center gap-2">
+          {Array.from({
+            length: Math.min(mobileGrid ? pageCount : maxIndex + 1, 8),
+          }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentIndex(mobileGrid ? i * visibleProducts : i)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                (mobileGrid ? currentPage : currentIndex) === i
+                  ? "bg-red-500 w-6"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* View all button */}
+      <div className="mt-5 flex justify-center px-2 md:mt-6">
+        <Link
+          href="/shop"
+          className="w-full max-w-xs touch-manipulation rounded-lg border-2 border-gray-900 px-6 py-2.5 text-center text-sm font-medium text-gray-900 transition-colors duration-300 hover:bg-gray-900 hover:text-white sm:w-auto sm:max-w-none sm:text-base"
+        >
+          {t("View All Sales")}
+        </Link>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ProductTwo;

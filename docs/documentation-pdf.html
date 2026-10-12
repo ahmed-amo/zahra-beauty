@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>BéBé Dome — Documentation</title>
+    <style>
+        @page { margin: 28mm 22mm 24mm 22mm; }
+        body {
+            font-family: DejaVu Sans, sans-serif;
+            font-size: 11pt;
+            line-height: 1.45;
+            color: #1f2937;
+        }
+        h1 {
+            font-size: 22pt;
+            color: #2E6FC7;
+            margin: 0 0 6px;
+            border-bottom: 3px solid #2E6FC7;
+            padding-bottom: 8px;
+        }
+        h2 {
+            font-size: 14pt;
+            color: #1e40af;
+            margin: 22px 0 8px;
+            page-break-after: avoid;
+        }
+        h3 {
+            font-size: 12pt;
+            color: #334155;
+            margin: 14px 0 6px;
+            page-break-after: avoid;
+        }
+        .meta { color: #64748b; font-size: 10pt; margin-bottom: 18px; }
+        .cover {
+            text-align: center;
+            padding: 40px 0 30px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+        .cover .brand {
+            font-size: 28pt;
+            font-weight: bold;
+            color: #2E6FC7;
+            margin-bottom: 8px;
+        }
+        .cover .sub { color: #64748b; font-size: 12pt; }
+        p { margin: 0 0 8px; }
+        ul { margin: 4px 0 10px 18px; padding: 0; }
+        li { margin-bottom: 3px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 14px;
+            font-size: 10pt;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th { background: #eff6ff; color: #1e3a8a; }
+        .badge {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 9pt;
+        }
+        .badge-wait {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .footer-note {
+            margin-top: 28px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 9pt;
+            color: #94a3b8;
+            text-align: center;
+        }
+        code {
+            font-size: 9pt;
+            background: #f1f5f9;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="brand">BéBé Dome</div>
+        <div class="sub">Documentation technique &amp; fonctionnelle</div>
+        <p class="meta" style="margin-top:14px;">
+            Version 1.0 · 9 août 2026<br>
+            Laravel 12 · React 19 · Inertia.js 2 · PostgreSQL
+        </p>
+    </div>
+
+    <h2>1. Présentation</h2>
+    <p>
+        <strong>BéBé Dome</strong> est une boutique e-commerce dédiée aux produits pour bébés.
+        L’application est construite en <strong>Laravel + React + Inertia</strong> (expérience fluide sans API REST séparée pour le front boutique).
+    </p>
+    <p><strong>Objectifs :</strong> catalogue hiérarchique, panier / wishlist / COD, packs &amp; listes de naissance partageables, espaces Admin / Client, multilingue FR / EN / AR (RTL).</p>
+
+    <h2>2. Architecture</h2>
+    <table>
+        <tr><th>Couche</th><th>Technologie</th></tr>
+        <tr><td>Backend</td><td>PHP 8.2+ / Laravel 12</td></tr>
+        <tr><td>Frontend</td><td>React 19, TypeScript, Inertia 2, Vite, Tailwind 4</td></tr>
+        <tr><td>Auth</td><td>Sessions + Socialite (Google / Facebook)</td></tr>
+        <tr><td>Rôles</td><td>Spatie Permission</td></tr>
+        <tr><td>Médias / PDF</td><td>Spatie Media Library · DomPDF</td></tr>
+        <tr><td>Base de données</td><td>PostgreSQL 16 (Docker port 5433)</td></tr>
+        <tr><td>Deploy</td><td>Docker, Nginx, PHP-FPM, Supervisor, Railway</td></tr>
+    </table>
+    <p>En production, <code>php artisan queue:work</code> tourne via Supervisor.</p>
+
+    <h2>3. Boutique</h2>
+    <h3>3.1 Accueil</h3>
+    <p>Cover → marques → promotions → produits → <strong>packs</strong> → bannière → catégories → confiance / livraison.</p>
+    <h3>3.2 Navigation</h3>
+    <ul>
+        <li><code>/products</code> — catalogue</li>
+        <li><code>/categories</code>, <code>/category/{slug}</code> — arbre de catégories</li>
+        <li><code>/product/{slug}</code> — fiche (variants, galerie, avis)</li>
+        <li><code>/search</code> — recherche</li>
+    </ul>
+    <h3>3.3 Panier &amp; checkout</h3>
+    <ul>
+        <li>Panier / wishlist côté client</li>
+        <li>Checkout invité possible</li>
+        <li>Paiement live : <strong>cash on delivery</strong></li>
+        <li>Chargily : prévu, non intégré</li>
+    </ul>
+
+    <h2>4. Packs &amp; listes de naissance</h2>
+    <p>Fonctionnalité majeure livrée pour le projet.</p>
+    <h3>4.1 Packs admin</h3>
+    <ul>
+        <li>CRUD <code>/admin/birth-list-packs</code></li>
+        <li>Types : Nouveau-né / Bébé / Bambin</li>
+        <li>Vitrine <code>/listes-de-naissance</code> + homepage</li>
+        <li>Clone pack → liste personnelle client</li>
+    </ul>
+    <h3>4.2 Listes client</h3>
+    <ul>
+        <li>Création / édition (nom, photo de couverture validée JPG/PNG/WEBP/GIF)</li>
+        <li>Ajout produits depuis le catalogue</li>
+        <li>Partage <code>/liste/{token}</code> — réserver, offrir, cagnotte</li>
+    </ul>
+    <h3>4.3 Bouton « Ajouter à la liste »</h3>
+    <p>Icône cadeau sur toutes les cartes produit + fiche produit.</p>
+    <table>
+        <tr><th>Contexte</th><th>Comportement</th></tr>
+        <tr><td>Desktop</td><td>Tooltip (« Ajouter à Nom de la liste »)</td></tr>
+        <tr><td>Mobile</td><td>Icône toujours visible + bottom sheet</td></tr>
+        <tr><td>1 liste</td><td>Ajout immédiat</td></tr>
+        <tr><td>Plusieurs</td><td>Sélecteur de liste</td></tr>
+        <tr><td>Invité</td><td>Redirection login</td></tr>
+    </table>
+    <p>Navbar : libellé <strong>Packs And Lists</strong> (FR : Packs et listes).</p>
+
+    <h2>5. Auth &amp; emails</h2>
+    <ul>
+        <li>Register / login + OAuth Google / Facebook</li>
+        <li>Après Google (client) → <strong>accueil boutique</strong></li>
+        <li>Pas d’OTP après Google (email déjà vérifié)</li>
+        <li><strong>WelcomeEmail</strong> à la création de compte</li>
+        <li>Dev : Mailtrap sandbox (inbox Mailtrap, pas Gmail)</li>
+        <li>Confirmation commande + facture PDF</li>
+    </ul>
+
+    <h2>6. Tableaux de bord</h2>
+    <h3>Admin</h3>
+    <p>Stats, catégories (arbre), attributs, produits, packs, promotions, hero/marques, commandes, clients, notifications.</p>
+    <h3>Client</h3>
+    <p>Dashboard, commandes, listes de naissance, wishlist, profil.</p>
+
+    <h2>7. Déploiement Railway</h2>
+    <ol>
+        <li>Image Docker production</li>
+        <li>Variables d’environnement (APP_KEY, APP_URL, DB, MAIL_*, OAuth…)</li>
+        <li><strong>Volume</strong> : <code>/var/www/html/storage/app/public</code></li>
+        <li>Port public = <code>$PORT</code> (Nginx), healthcheck <code>/up</code></li>
+    </ol>
+    <p>Sans volume, les images admin disparaissent à chaque redeploy.</p>
+
+    <h2>8. Installation locale</h2>
+    <p><code>docker compose up -d db</code> → Composer → migrate --seed → <code>npm run dev</code> + <code>php artisan serve</code></p>
+    <p>Comptes seed : <code>admin@bebedome.dz</code> / <code>client@bebedome.dz</code> — mot de passe <code>zmartcs123</code></p>
+    <p>Tests : <code>composer test</code></p>
+
+    <h2>9. Synthèse des livrables</h2>
+    <table>
+        <tr><th>Livrable</th><th>Statut</th></tr>
+        <tr><td>Arbre de catégories</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Listes de naissance + packs + partage</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Add-to-list sur toute la boutique</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Upload couverture + validation</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Navbar Packs And Lists</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>OAuth Google → shop home</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Welcome email + Mailtrap</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Checkout COD + i18n FR/EN/AR</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Docker / Railway / queue worker</td><td><span class="badge">Livré</span></td></tr>
+        <tr><td>Chargily Pay (intégration réelle)</td><td><span class="badge badge-wait">Prévu</span></td></tr>
+    </table>
+
+    <div class="footer-note">
+        BéBé Dome — Documentation technique &amp; fonctionnelle — © 2026<br>
+        Fichier généré pour le dépôt GitHub · dossier docs/
+    </div>
+</body>
+</html>

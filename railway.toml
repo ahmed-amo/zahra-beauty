@@ -1,0 +1,17 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+buildTarget = "production"
+
+[deploy]
+# Nginx listens on $PORT (default 8080). In Railway → Settings → Networking,
+# set the public domain Target Port to the SAME value as $PORT — never 9000
+# (9000 was PHP-FPM and caused connection-reset 502s).
+#
+# Persist admin uploads: Volume mounted at /var/www/html/storage/app/public
+# (see README "Production images"). Keep FILESYSTEM_DISK=local and MEDIA_DISK=public.
+startCommand = "/usr/local/bin/docker-entrypoint.sh /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+healthcheckPath = "/up"
+healthcheckTimeout = 180
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
