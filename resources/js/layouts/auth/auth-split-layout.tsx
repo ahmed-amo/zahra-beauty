@@ -19,7 +19,7 @@ export default function AuthLayout({ children, title, description }: PropsWithCh
                 <LanguageSwitcher />
             </div>
             {/* Left Side - Branding */}
-            <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary to-brand-pink relative overflow-hidden">
+            <div className="relative hidden overflow-hidden bg-[var(--bg-inverse)] text-[var(--text-inverse)] lg:flex lg:w-1/2">
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-dark/30 rounded-full blur-3xl" />
@@ -34,7 +34,7 @@ export default function AuthLayout({ children, title, description }: PropsWithCh
                         >
                             <div className="absolute inset-0 rounded-full bg-white/20 blur-2xl transition-all duration-300 group-hover:bg-white/30 group-focus-visible:bg-white/35" />
                             <img
-                                src="/logo-zahra-black.png"
+                                src="/logo-zahra-gold.png"
                                 alt=""
                                 className="relative z-10 w-40 origin-center scale-[2] drop-shadow-2xl transition-transform duration-300 group-hover:scale-[2.04] group-active:scale-[1.98]"
                             />
@@ -93,7 +93,7 @@ export default function AuthLayout({ children, title, description }: PropsWithCh
 
                 <div className="w-full max-w-md mt-16 lg:mt-0">
                     {/* Card Container */}
-                    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-soft border border-brand-border dark:border-zinc-700 overflow-hidden text-zinc-900 dark:text-zinc-100">
+                    <div className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-soft">
                         {/* Brand Accent Bar */}
                         <div className="h-1.5 bg-brand-gradient" />
 
@@ -109,12 +109,12 @@ export default function AuthLayout({ children, title, description }: PropsWithCh
                             {(title || description) && (
                                 <div className="text-center space-y-3">
                                     {title && (
-                                        <h1 className="text-3xl font-bold text-primary dark:text-primary">
+                                        <h1 className="text-3xl font-bold text-foreground">
                                             {title}
                                         </h1>
                                     )}
                                     {description && (
-                                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                                        <p className="text-sm leading-relaxed text-muted-foreground">
                                             {description}
                                         </p>
                                     )}
@@ -122,7 +122,7 @@ export default function AuthLayout({ children, title, description }: PropsWithCh
                             )}
 
                             {/* Form Content */}
-                            <div className="space-y-6 text-zinc-900 dark:text-zinc-100">
+                            <div className="space-y-6 text-foreground">
                                 {children}
                             </div>
                         </div>

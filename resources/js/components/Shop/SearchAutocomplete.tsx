@@ -302,8 +302,8 @@ export default function SearchAutocomplete({
       <div
         className={
           mobile
-            ? "relative flex w-full items-center rounded-xl border border-brand-border bg-white shadow-sm focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/20"
-            : "relative flex w-full items-center rounded-full border border-brand-border bg-white pe-1 shadow-sm focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/20"
+            ? "shop-search relative flex h-10 w-full items-center overflow-hidden rounded-xl bg-card shadow-[inset_0_0_0_1px_var(--border)]"
+            : "shop-search relative flex h-10 w-full items-center overflow-hidden rounded-full bg-card shadow-[inset_0_0_0_1px_var(--border)]"
         }
       >
         {/* Single search icon — left affordance on mobile; desktop uses the round submit button only */}
@@ -346,8 +346,8 @@ export default function SearchAutocomplete({
           enterKeyHint="search"
           className={
             mobile
-              ? "h-10 w-full rounded-xl border-0 bg-transparent ps-9 pe-9 text-start text-sm text-brand-text caret-brand-text shadow-none placeholder:text-brand-muted focus-visible:border-transparent focus-visible:ring-0"
-              : "h-10 min-w-0 flex-1 rounded-full border-0 bg-transparent py-2 ps-4 pe-14 text-start text-brand-text caret-brand-text shadow-none placeholder:text-brand-muted focus-visible:border-transparent focus-visible:ring-0 md:pe-16"
+              ? "shop-search-input h-10 w-full rounded-none border-0 bg-transparent ps-9 pe-9 text-sm shadow-none ring-0 focus-visible:ring-0"
+              : "shop-search-input h-10 min-w-0 flex-1 rounded-none border-0 bg-transparent py-0 ps-4 pe-2 shadow-none ring-0 focus-visible:ring-0"
           }
           value={query}
           onChange={(e) => {
@@ -372,8 +372,7 @@ export default function SearchAutocomplete({
           <Button
             type="button"
             onClick={handleSearch}
-            disabled={query.trim().length < MIN_CHARS && !loading}
-            className="z-10 h-8 shrink-0 rounded-full bg-primary px-4 text-primary-foreground hover:bg-brand-dark focus-visible:z-20 disabled:pointer-events-none disabled:opacity-50"
+            className="shop-search-submit relative z-10 size-10 shrink-0 rounded-full border-0 bg-primary p-0 text-primary-foreground shadow-none ring-0 hover:bg-brand-dark focus-visible:ring-0"
             aria-label={t("Search")}
           >
             {loading ? (

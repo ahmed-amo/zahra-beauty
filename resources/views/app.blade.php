@@ -7,7 +7,10 @@
         <script>
             (function () {
                 try {
-                    var appearance = localStorage.getItem('appearance') === 'dark' ? 'dark' : 'light';
+                    var stored = localStorage.getItem('appearance');
+                    var appearance = stored === 'dark' || stored === 'light'
+                        ? stored
+                        : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
                     var dark = appearance === 'dark';
                     document.documentElement.classList.toggle('dark', dark);
                     document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
@@ -22,10 +25,12 @@
 
         <style>
             html {
-                background-color: #ffffff;
+                background-color: #faf8f5;
+                color-scheme: light;
             }
             html.dark {
-                background-color: #111111;
+                background-color: #0b0b0c;
+                color-scheme: dark;
             }
         </style>
 

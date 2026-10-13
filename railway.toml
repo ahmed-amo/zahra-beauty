@@ -4,6 +4,9 @@ dockerfilePath = "Dockerfile"
 buildTarget = "production"
 
 [deploy]
+# Stay awake. Shoppers and the admin should open the site with no cold start.
+sleepApplication = false
+
 # Nginx listens on $PORT (default 8080). In Railway → Settings → Networking,
 # set the public domain Target Port to the SAME value as $PORT — never 9000
 # (9000 was PHP-FPM and caused connection-reset 502s).

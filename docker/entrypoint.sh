@@ -35,11 +35,15 @@ if [ -f /var/www/html/artisan ]; then
         exit 1
     fi
 
-    # Clear any config cache baked into the image during Docker build so that
-    # runtime environment variables are picked up when the cache is rebuilt.
-    php artisan config:clear
-
-    php artisan storage:link --force
+    # One PHP process for the whole boot. Mail implements ShouldQueue, so this
+    # must stay sync: there is no queue worker, and a worker would block sleep.
+    export QUEUE_CONNECTION=sync
+    if [ -z "${LOG_CHANNEL:-}" ]; then
+        export LOG_CHANNEL=stderr
+    fi
+    if [ -z "${LOG_LEVEL:-}" ]; then
+        export LOG_LEVEL=warning
+    fi
 
     if [ -n "${RAILWAY_VOLUME_MOUNT_PATH:-}" ]; then
         echo "Persistent volume mounted at ${RAILWAY_VOLUME_MOUNT_PATH}"
@@ -49,31 +53,8 @@ if [ -f /var/www/html/artisan ]; then
         echo "         Attach a volume mounted at /var/www/html/storage/app/public (see README)."
     fi
 
-    echo "Waiting for Postgres..."
-    i=0
-    until php artisan migrate:status >/dev/null 2>&1; do
-        i=$((i + 1))
-        if [ "$i" -ge 30 ]; then
-            echo "FATAL: database not reachable after 60s."
-            exit 1
-        fi
-        echo "  retry $i/30"
-        sleep 2
-    done
-
-    echo "Running migrations (never migrate:fresh)..."
-    php artisan migrate --force
-
-    php artisan db:seed --class=RolesAndPermissionsSeeder --force
-    php artisan db:seed --class=SuperAdminSeeder --force
-
-    # One-time hide of the baby catalog, then upsert the small Zahra set.
-    # Later deploys only refresh those rows (no Excel import, no full reseed).
-    php artisan catalog:zahra
-
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
+    echo "Preparing Laravel (migrate, seed, cache)..."
+    php artisan app:prepare
 
     echo "Laravel ready. Public HTTP must target port ${LISTEN_PORT} (nginx), not 9000."
 fi

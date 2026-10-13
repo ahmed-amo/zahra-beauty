@@ -65,6 +65,7 @@ RUN rm -f /usr/local/etc/php-fpm.d/www.conf.default /usr/local/etc/php-fpm.d/zz-
     && chown www-data:www-data /run/php
 
 # Railway injects $PORT at runtime; nginx binds to it. Default/local compose uses 8080.
+# QUEUE_CONNECTION is forced to sync in docker-entrypoint.sh (no resident worker).
 ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

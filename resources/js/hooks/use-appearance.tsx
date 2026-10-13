@@ -10,7 +10,15 @@ const setCookie = (name: string, value: string, days = 365) => {
     document.cookie = `${name}=${value};path=/;max-age=${maxAge};SameSite=Lax`;
 };
 
-/** Apply light/dark from our toggle only (not OS). */
+export function resolveAppearance(): Appearance {
+    const stored = localStorage.getItem('appearance');
+    if (stored === 'dark' || stored === 'light') {
+        return stored;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+/** Apply light/dark. A saved choice wins; otherwise the OS preference is used. */
 export const applyTheme = (appearance: Appearance) => {
     const isDark = appearance === 'dark';
     const root = document.documentElement;
@@ -20,8 +28,7 @@ export const applyTheme = (appearance: Appearance) => {
 };
 
 export function initializeTheme() {
-    const saved = (localStorage.getItem('appearance') as Appearance | null) === 'dark' ? 'dark' : 'light';
-    applyTheme(saved);
+    applyTheme(resolveAppearance());
 }
 
 export function useAppearance() {
@@ -29,7 +36,7 @@ export function useAppearance() {
         if (typeof window === 'undefined') {
             return 'light';
         }
-        return localStorage.getItem('appearance') === 'dark' ? 'dark' : 'light';
+        return resolveAppearance();
     });
 
     const updateAppearance = useCallback((mode: Appearance) => {
@@ -40,7 +47,7 @@ export function useAppearance() {
     }, []);
 
     useEffect(() => {
-        const saved = localStorage.getItem('appearance') === 'dark' ? 'dark' : 'light';
+        const saved = resolveAppearance();
         setAppearance(saved);
         applyTheme(saved);
     }, []);

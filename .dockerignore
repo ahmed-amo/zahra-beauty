@@ -12,3 +12,10 @@ storage/logs
 storage/framework
 bootstrap/cache/*.php
 docker-compose.yml
+tests
+docs
+stubs
+.github
+phpunit.xml
+.phpunit.result.cache
+*.md

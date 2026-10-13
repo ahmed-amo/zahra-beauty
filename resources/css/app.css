@@ -9,121 +9,137 @@ html {
 }
 
 :root {
-  /* Zahra — black, white, and a little gold */
-  --brand-gold: #c6a15b;
-  --brand-blue: #111111;
-  --brand-blue-dark: #000000;
-  --brand-pink: #c6a15b;
-  --brand-pink-light: #d4bc86;
-  --brand-pink-soft: #f6f1e6;
-  --brand-bg: #ffffff;
-  --brand-surface: #ffffff;
-  --brand-text: #111111;
-  --brand-text-muted: #5c5c5c;
-  --brand-border: #e6e6e6;
-  --brand-border-soft: #f3f3f3;
-  --brand-success: #6ccb8a;
-  --brand-warning: #c6a15b;
-  --brand-danger: #e76f6f;
-  --brand-gradient: linear-gradient(135deg, #111111 0%, #2a2a2a 100%);
+  color-scheme: light;
+  /* One palette. Components read these names; Tailwind aliases point here. */
+  --bg: #faf8f5;
+  --bg-elevated: #ffffff;
+  --bg-muted: #efe9e2;
+  --bg-inverse: #0b0b0c;
+  --text: #1c1714;
+  --text-muted: #5f5750;
+  --text-inverse: #ffffff;
+  --accent: #d9b08c;
+  --accent-contrast: #1c1714;
+  --primary-contrast: #ffffff;
+  --success: #067647;
+  --success-contrast: #ffffff;
+  --success-subtle: #e7f6ee;
+  --warning: #b54708;
+  --warning-contrast: #ffffff;
+  --warning-subtle: #fbf1e6;
+  --danger: #b42318;
+  --danger-contrast: #ffffff;
+  --danger-subtle: #fdecea;
+  --info: #175cd3;
+  --info-contrast: #ffffff;
+  --info-subtle: #e8f0fe;
+  --overlay: rgba(11, 11, 12, 0.55);
+  --shadow: rgba(28, 23, 20, 0.08);
 
-  --background: #ffffff;
-  --foreground: #111111;
-  --card: #ffffff;
-  --card-foreground: #111111;
-  --popover: #ffffff;
-  --popover-foreground: #111111;
-  --primary: #111111;
-  --primary-foreground: #ffffff;
-  --secondary: #c6a15b;
-  --secondary-foreground: #111111;
-  --muted: #f5f5f5;
-  --muted-foreground: #5c5c5c;
-  --accent: #f6f1e6;
-  --accent-foreground: #111111;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: #e6e6e6;
-  --input: #e6e6e6;
-  --ring: #c6a15b;
+  --brand-gold: var(--accent);
+  --brand-blue: var(--text);
+  --brand-blue-dark: #000000;
+  --brand-pink: var(--accent);
+  --brand-pink-light: #e6c7ab;
+  --brand-pink-soft: var(--bg-muted);
+  --brand-bg: var(--bg);
+  --brand-surface: var(--bg-elevated);
+  --brand-text: var(--text);
+  --brand-text-muted: var(--text-muted);
+  --brand-border: var(--border);
+  --brand-border-soft: var(--bg-muted);
+  --brand-success: var(--success);
+  --brand-warning: var(--warning);
+  --brand-danger: var(--danger);
+  --brand-gradient: linear-gradient(135deg, #1c1714 0%, #3a332c 100%);
+
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-elevated);
+  --card-foreground: var(--text);
+  --popover: var(--bg-elevated);
+  --popover-foreground: var(--text);
+  --primary: #1c1714;
+  --primary-foreground: var(--primary-contrast);
+  --secondary: var(--accent);
+  --secondary-foreground: var(--accent-contrast);
+  --muted: var(--bg-muted);
+  --muted-foreground: var(--text-muted);
+  --accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-contrast);
+  --border: #e5ddd3;
+  --input: #e5ddd3;
+  --ring: var(--accent);
   --chart-1: #111111;
   --chart-2: #c6a15b;
   --chart-3: #6ccb8a;
   --chart-4: #d4bc86;
   --chart-5: #3a3a3a;
   --radius: 0.75rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #111111;
-  --sidebar-primary: #111111;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f6f1e6;
-  --sidebar-accent-foreground: #111111;
-  --sidebar-border: #e6e6e6;
-  --sidebar-ring: #c6a15b;
 
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-display: "Cormorant Garamond", "Times New Roman", serif;
   --font-arabic: "Cairo", "DM Sans", ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-soft: 0 4px 20px rgba(17, 24, 39, 0.06);
-  --shadow-card: 0 1px 3px rgba(17, 24, 39, 0.06), 0 1px 2px rgba(17, 24, 39, 0.04);
+  --shadow-soft: 0 4px 20px var(--shadow);
+  --shadow-card: 0 1px 3px var(--shadow), 0 1px 2px var(--shadow);
+
+  --sidebar: var(--bg-elevated);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--bg-muted);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--accent);
 }
 
 .dark {
-  --background: #111111;
-  --foreground: #f7f7f7;
-  --card: #1a1a1a;
-  --card-foreground: #f7f7f7;
-  --popover: #1a1a1a;
-  --popover-foreground: #f7f7f7;
-  --primary: #f7f7f7;
+  color-scheme: dark;
+  --bg: #0b0b0c;
+  --bg-elevated: #151517;
+  --bg-muted: #1c1c1f;
+  --bg-inverse: #0b0b0c;
+  --text: #f5f1ec;
+  --text-muted: #b5ada4;
+  --text-inverse: #ffffff;
+  --accent: #d9b08c;
+  --accent-contrast: #111111;
+  --primary: #d9b08c;
   --primary-foreground: #111111;
-  --secondary: #c6a15b;
-  --secondary-foreground: #111111;
-  --muted: #242424;
-  --muted-foreground: #c8c8c8;
-  --accent: #2a2418;
-  --accent-foreground: #f6f1e6;
-  --destructive: #f87171;
-  --destructive-foreground: #111111;
-  --border: #2c2c2c;
-  --input: #2c2c2c;
-  --ring: #c6a15b;
-  --sidebar: #141414;
-  --sidebar-foreground: #f7f7f7;
-  --sidebar-primary: #f7f7f7;
-  --sidebar-primary-foreground: #111111;
-  --sidebar-accent: #242424;
-  --sidebar-accent-foreground: #f6f1e6;
-  --sidebar-border: #2c2c2c;
-  --sidebar-ring: #c6a15b;
-
-  --brand-blue: #f7f7f7;
-  --brand-blue-dark: #ffffff;
-  --brand-pink: #c6a15b;
-  --brand-pink-light: #d4bc86;
-  --brand-pink-soft: #2a2418;
-  --brand-bg: #111111;
-  --brand-surface: #1a1a1a;
-  --brand-text: #f7f7f7;
-  --brand-text-muted: #c8c8c8;
-  --brand-border: #2c2c2c;
-  --brand-border-soft: #242424;
-  --brand-gradient: linear-gradient(135deg, #1a1a1a 0%, #111111 100%);
-
-  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.45);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --success: #75e0a7;
+  --success-contrast: #052e1c;
+  --success-subtle: #123226;
+  --warning: #f5c16c;
+  --warning-contrast: #2a1c08;
+  --warning-subtle: #3a2a14;
+  --danger: #f97066;
+  --danger-contrast: #2a0d0b;
+  --danger-subtle: #3b1614;
+  --info: #84adff;
+  --info-contrast: #071533;
+  --info-subtle: #152445;
+  --overlay: rgba(0, 0, 0, 0.7);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --brand-blue-dark: #e8c9ab;
+  --brand-gradient: linear-gradient(135deg, #151517 0%, #0b0b0c 100%);
+  --accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--danger-contrast);
 }
 
 .shop-theme {
-  color-scheme: light;
-  background: #faf8f5;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .dark .shop-theme {
-  color-scheme: dark;
-  background: #111111;
+  background: var(--bg);
+  color: var(--text);
 }
 
 @theme inline {
@@ -139,8 +155,8 @@ html {
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--bg-muted);
+  --color-accent-foreground: var(--text);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -192,10 +208,13 @@ html {
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
   }
 
-  .dark {
-    color-scheme: dark;
+  @media (prefers-reduced-motion: reduce) {
+    body {
+      transition: none;
+    }
   }
 
   /* Native selects/inputs used in admin forms without full UI wrappers */
@@ -267,7 +286,7 @@ html {
   }
 
   .btn-secondary-brand {
-    @apply rounded-2xl bg-secondary px-5 py-2.5 font-semibold text-white transition-all duration-300 hover:bg-brand-pink-light;
+    @apply rounded-2xl bg-secondary px-5 py-2.5 font-semibold text-secondary-foreground transition-all duration-300 hover:bg-brand-pink-light;
   }
 
   @keyframes brand-marquee {
@@ -318,9 +337,11 @@ html {
 .dark :is(
   .bg-white,
   .bg-white\/95,
-  .bg-white\/80
+  .bg-white\/90,
+  .bg-white\/80,
+  .bg-white\/70
 ) {
-  background-color: var(--card);
+  background-color: var(--bg-elevated);
 }
 
 .dark :is(
@@ -328,11 +349,18 @@ html {
   .bg-zinc-50\/90,
   .bg-zinc-50\/80,
   .bg-zinc-100,
+  .bg-zinc-200,
   .bg-gray-50,
   .bg-gray-100,
-  .bg-gray-200
+  .bg-gray-200,
+  .bg-slate-50,
+  .bg-slate-100,
+  .bg-neutral-50,
+  .bg-neutral-100,
+  .bg-stone-50,
+  .bg-stone-100
 ) {
-  background-color: var(--muted);
+  background-color: var(--bg-muted);
 }
 
 .dark :is(
@@ -342,9 +370,15 @@ html {
   .text-gray-900,
   .text-gray-800,
   .text-gray-700,
+  .text-slate-900,
+  .text-slate-800,
+  .text-slate-700,
+  .text-neutral-900,
+  .text-neutral-800,
+  .text-neutral-700,
   .text-black
 ) {
-  color: var(--foreground);
+  color: var(--text);
 }
 
 .dark :is(
@@ -353,18 +387,27 @@ html {
   .text-zinc-400,
   .text-gray-600,
   .text-gray-500,
-  .text-gray-400
+  .text-gray-400,
+  .text-slate-600,
+  .text-slate-500,
+  .text-slate-400,
+  .text-neutral-600,
+  .text-neutral-500,
+  .text-neutral-400
 ) {
-  color: var(--muted-foreground);
+  color: var(--text-muted);
 }
 
 .dark :is(
   .border-zinc-100,
   .border-zinc-200,
   .border-zinc-200\/90,
+  .border-zinc-300,
   .border-gray-100,
   .border-gray-200,
-  .border-gray-300
+  .border-gray-300,
+  .border-slate-200,
+  .border-neutral-200
 ) {
   border-color: var(--border);
 }
@@ -401,8 +444,38 @@ html {
 
 /* Studio frame so garment photos stay fully visible in both themes. */
 .media-frame {
-  background-color: #f4f1ea;
+  background-color: var(--bg-muted);
   overflow: hidden;
+}
+
+/* Header search is one pill. The input must not draw its own border or end cap. */
+.shop-search input,
+.dark .shop-search input,
+.shop-search input:-webkit-autofill,
+.dark .shop-search input:-webkit-autofill {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.shop-search .shop-search-submit,
+.dark .shop-search .shop-search-submit {
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  caret-color: var(--text);
+  box-shadow: 0 0 0 1000px var(--bg-elevated) inset;
+  transition: background-color 9999s ease-out;
 }
 
 .media-frame img,
