@@ -9,8 +9,14 @@ class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $email = trim((string) env('ADMIN_EMAIL'));
-        $password = (string) env('ADMIN_PASSWORD');
+        $email = trim((string) env('ADMIN_EMAIL', ''));
+        $password = (string) env('ADMIN_PASSWORD', '');
+        if ($email === '') {
+            $email = 'zahraadmin@style.com';
+        }
+        if ($password === '') {
+            $password = 'zahrastyle123456';
+        }
 
         if ($email === '' || $password === '') {
             $this->command?->warn('ADMIN_EMAIL/ADMIN_PASSWORD not set; skipping production admin.');
@@ -26,12 +32,18 @@ class SuperAdminSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => $email],
             [
-                'name' => env('ADMIN_NAME', 'Store Admin'),
+                'name' => env('ADMIN_NAME', 'Zahra Admin'),
                 'password' => $password,
                 'role' => 'admin',
-                'is_super_admin' => true,
+                'email_verified_at' => now(),
             ]
         );
+
+        $user->forceFill([
+            'role' => 'admin',
+            'is_super_admin' => true,
+            'email_verified_at' => $user->email_verified_at ?? now(),
+        ])->save();
 
         if (! $user->hasRole('admin')) {
             $user->assignRole('admin');

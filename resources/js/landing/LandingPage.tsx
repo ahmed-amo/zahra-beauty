@@ -11,35 +11,55 @@ import type { Product } from "@/types/products";
 
 const HERO = [IMAGES.hero1, IMAGES.hero2, IMAGES.hero3];
 
+type CoverProp = { image_url?: string | null } | null;
+type HeroSlideProp = { imageSrc?: string | null };
+type BrandProp = { name?: string; image_url?: string | null };
+type CategoryProp = { name: string; slug: string; image_url?: string | null };
+
 function on(flag: boolean) {
   return flag;
 }
 
-export default function LandingPage({ products }: { products: Product[] }) {
+export default function LandingPage({
+  products,
+  cover = null,
+  heroSlides = [],
+  brands = [],
+  categories = [],
+}: {
+  products: Product[];
+  cover?: CoverProp;
+  heroSlides?: HeroSlideProp[];
+  brands?: BrandProp[];
+  categories?: CategoryProp[];
+}) {
   const { t } = useLandingI18n();
   const theme = landingConfig.theme;
   const catalog = getLandingProducts(products);
   const featured = catalog.slice(0, 8);
-  const best = [...catalog].reverse().slice(0, 4);
+  const best = catalog.length > 4 ? catalog : [...catalog, ...catalog];
+  const sale = catalog.filter((item) => item.onSale).slice(0, 4);
+  const heroImages = heroSlides.map((slide) => slide.imageSrc).filter((src): src is string => Boolean(src));
+  const promoPhoto = cover?.image_url || IMAGES.coat;
+  const summerPhoto = brands.find((brand) => brand.image_url)?.image_url || IMAGES.hero1;
   const sections = landingConfig.sections;
 
   return (
     <>
       <LandingHeader />
       <main>
-        {on(sections.hero) && (theme === "b" ? <HeroB /> : <HeroA />)}
-        {on(sections.categories) && (theme === "b" ? <Circles /> : <CategoriesA />)}
+        {on(sections.hero) && (theme === "b" ? <HeroB /> : <HeroA images={heroImages.length > 0 ? heroImages : HERO} />)}
+        {on(sections.categories) && (theme === "b" ? <Circles /> : <CategoriesA categories={categories} />)}
         {on(sections.featured) &&
           (theme === "b" ? (
             <Arrivals products={featured.slice(0, 4)} />
           ) : (
             <ProductGrid title={t("featured")} products={featured} withFilters />
           ))}
-        {theme === "b" ? <Banners /> : on(sections.promo) && <PromoA />}
-        {theme === "a" && on(sections.bestsellers) && (
-          <Best products={best} />
-        )}
-        {theme === "a" && on(sections.summerSale) && <SaleA />}
+        {theme === "b" ? <Banners /> : on(sections.promo) && <PromoA photo={promoPhoto} />}
+        {theme === "a" && on(sections.bestsellers) && <Best products={best} />}
+        {theme === "a" && sale.length > 0 && <ProductGrid title={t("onsale")} products={sale} />}
+        {theme === "a" && on(sections.summerSale) && <SaleA photo={summerPhoto} />}
         {(theme === "b" || sections.testimonials) && <Quotes />}
         {(theme === "b" || sections.instagram) && <InstagramStrip />}
         {on(sections.newsletter) && <Newsletter theme={theme} />}
@@ -49,7 +69,7 @@ export default function LandingPage({ products }: { products: Product[] }) {
   );
 }
 
-function HeroA() {
+function HeroA({ images }: { images: string[] }) {
   const { t } = useLandingI18n();
   const scroller = useRef<HTMLDivElement>(null);
   const paused = useRef(false);
@@ -58,7 +78,7 @@ function HeroA() {
   const go = (next: number) => {
     const el = scroller.current;
     if (!el) return;
-    const i = (next + HERO.length) % HERO.length;
+    const i = (next + images.length) % images.length;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollTo({ left: i * el.clientWidth, behavior: reduce ? "auto" : "smooth" });
     setIndex(i);
@@ -70,7 +90,7 @@ function HeroA() {
     const id = window.setInterval(() => {
       if (paused.current) return;
       setIndex((current) => {
-        const next = (current + 1) % HERO.length;
+        const next = (current + 1) % images.length;
         const el = scroller.current;
         if (el) {
           el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
@@ -79,7 +99,7 @@ function HeroA() {
       });
     }, 6000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [images.length]);
 
   return (
     <section
@@ -102,7 +122,7 @@ function HeroA() {
           if (i !== index) setIndex(i);
         }}
       >
-        {HERO.map((src, i) => (
+        {images.map((src, i) => (
           <article className="ld-slide" key={src} aria-hidden={i !== index}>
             <img src={src} alt={i === 0 ? t("hero.mobileTitle") : ""} width={1600} height={1000} fetchPriority={i === 0 ? "high" : "low"} />
             <div className="ld-slide-scrim" />
@@ -129,7 +149,7 @@ function HeroA() {
         <ChevronRight />
       </button>
       <div className="ld-dots" role="tablist" aria-label={t("hero.dots")}>
-        {HERO.map((src, i) => (
+        {images.map((src, i) => (
           <button key={src} type="button" aria-label={`${i + 1}`} aria-current={i === index ? "true" : undefined} onClick={() => go(i)} />
         ))}
       </div>
@@ -137,14 +157,18 @@ function HeroA() {
   );
 }
 
-function CategoriesA() {
+function CategoriesA({ categories = [] }: { categories?: CategoryProp[] }) {
   const { t } = useLandingI18n();
-  const tiles = [
-    [IMAGES.women, t("cat.women"), "/category/robes"],
-    [IMAGES.men, t("cat.men"), "/products"],
-    [IMAGES.accessories, t("cat.accessories"), "/category/accessoires"],
-    [IMAGES.footwear, t("cat.footwear"), "/category/accessoires"],
-  ] as const;
+  const fromAdmin = categories.filter((item) => item.image_url).slice(0, 4);
+  const tiles =
+    fromAdmin.length >= 4
+      ? fromAdmin.map((item) => [item.image_url as string, item.name, `/category/${item.slug}`] as const)
+      : ([
+          [IMAGES.women, t("cat.women"), "/category/robes"],
+          [IMAGES.men, t("cat.men"), "/products"],
+          [IMAGES.accessories, t("cat.accessories"), "/category/accessoires"],
+          [IMAGES.footwear, t("cat.footwear"), "/category/accessoires"],
+        ] as const);
 
   return (
     <>
@@ -176,7 +200,7 @@ function CategoriesA() {
   );
 }
 
-function PromoA() {
+function PromoA({ photo }: { photo: string }) {
   const { t } = useLandingI18n();
   const items = [
     [BadgeCheck, "trust.quality.t", "trust.quality.d"],
@@ -197,7 +221,17 @@ function PromoA() {
             </Link>
           </div>
           <div className="ld-promo-photo">
-            <img src={IMAGES.coat} alt={t("promo.title")} width={800} height={1000} loading="lazy" />
+            <img
+              src={photo}
+              alt=""
+              width={800}
+              height={1000}
+              loading="lazy"
+              onError={(event) => {
+                const img = event.currentTarget;
+                if (!img.src.endsWith(IMAGES.coat)) img.src = IMAGES.coat;
+              }}
+            />
           </div>
           <ul className="ld-trust">
             {items.map(([Icon, title, body]) => (
@@ -216,10 +250,54 @@ function PromoA() {
 
 function Best({ products }: { products: LandingProduct[] }) {
   const { t } = useLandingI18n();
-  return <ProductGrid title={t("bestsellers")} products={products} />;
+  const scroller = useRef<HTMLDivElement>(null);
+  const paused = useRef(false);
+
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || products.length < 2) return;
+    const id = window.setInterval(() => {
+      if (paused.current) return;
+      const el = scroller.current;
+      if (!el) return;
+      const card = el.querySelector<HTMLElement>(".ld-card");
+      const gap = 18;
+      const step = card ? card.offsetWidth + gap : Math.round(el.clientWidth / 4);
+      const max = el.scrollWidth - el.clientWidth - 2;
+      const next = el.scrollLeft + step;
+      el.scrollTo({ left: next >= max ? 0 : next, behavior: "smooth" });
+    }, 3000);
+    return () => window.clearInterval(id);
+  }, [products.length]);
+
+  return (
+    <section
+      className="ld-section ld-band"
+      onMouseEnter={() => {
+        paused.current = true;
+      }}
+      onMouseLeave={() => {
+        paused.current = false;
+      }}
+    >
+      <div className="ld-wrap">
+        <div className="ld-head">
+          <h2>{t("bestsellers")}</h2>
+          <Link href="/products" className="ld-text-link">
+            {t("viewAll")} →
+          </Link>
+        </div>
+        <div className="ld-rail" ref={scroller}>
+          {products.map((product, index) => (
+            <ProductCard key={`${product.id}-${index}`} product={product} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function SaleA() {
+function SaleA({ photo }: { photo: string }) {
   const { t } = useLandingI18n();
   return (
     <section className="ld-section">
@@ -236,7 +314,17 @@ function SaleA() {
             </Link>
           </div>
           <div className="ld-sale-photo">
-            <img src={IMAGES.hero1} alt={t("sale.title")} width={900} height={1100} loading="lazy" />
+            <img
+              src={photo}
+              alt=""
+              width={900}
+              height={1100}
+              loading="lazy"
+              onError={(event) => {
+                const img = event.currentTarget;
+                if (!img.src.endsWith(IMAGES.hero1)) img.src = IMAGES.hero1;
+              }}
+            />
             <div className="ld-badge">{t("sale.badge")}</div>
           </div>
         </div>
@@ -434,16 +522,16 @@ function Newsletter({ theme }: { theme: "a" | "b" }) {
 
 function Social() {
   const items = [
-    { label: "Instagram", node: <Instagram size={16} /> },
-    { label: "Facebook", node: <Facebook size={16} /> },
-    { label: "Pinterest", node: <PinterestIcon /> },
-    { label: "YouTube", node: <Youtube size={16} /> },
-    { label: "TikTok", node: <TikTokIcon /> },
+    { label: "Instagram", href: "https://instagram.com", node: <Instagram size={18} /> },
+    { label: "Facebook", href: "https://facebook.com", node: <Facebook size={18} /> },
+    { label: "Pinterest", href: "https://pinterest.com", node: <PinterestIcon /> },
+    { label: "YouTube", href: "https://youtube.com", node: <Youtube size={18} /> },
+    { label: "TikTok", href: "https://tiktok.com", node: <TikTokIcon /> },
   ];
   return (
     <div className="ld-social">
       {items.map((item) => (
-        <a key={item.label} href="https://instagram.com" aria-label={item.label}>
+        <a key={item.label} href={item.href} target="_blank" rel="noreferrer" aria-label={item.label}>
           {item.node}
         </a>
       ))}
@@ -496,16 +584,6 @@ function SiteFooter() {
               ))}
             </div>
           ))}
-          <div>
-            <strong>{t("footer.accept")}</strong>
-            <div className="ld-pay">
-              <span>{t("pay.visa")}</span>
-              <span>{t("pay.mc")}</span>
-              <span>{t("pay.pp")}</span>
-              <span>{t("pay.apple")}</span>
-              <span>{t("pay.gpay")}</span>
-            </div>
-          </div>
         </div>
         <div className="ld-bottom">
           <span>© {year} {LANDING_BRAND}. {t("footer.rights")}</span>

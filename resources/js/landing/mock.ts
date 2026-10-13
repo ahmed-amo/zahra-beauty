@@ -12,6 +12,7 @@ export type LandingProduct = {
   hoverImage?: string;
   slug: string;
   description: string;
+  onSale?: boolean;
 };
 
 /** Swap these paths for your own photos. One map, whole landing page. */
@@ -77,6 +78,9 @@ export function getLandingProducts(real: Product[] = []): LandingProduct[] {
       hoverImage: product.images?.[1] || undefined,
       slug: product.slug,
       description: product.description ?? product.name,
+      onSale:
+        Boolean(product.is_on_sale) ||
+        (product.compare_at_price != null && Number(product.compare_at_price) > Number(product.price)),
     }));
   }
 

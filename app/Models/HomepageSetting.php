@@ -41,6 +41,10 @@ class HomepageSetting extends Model
      */
     public function toShopFrontArray(): ?array
     {
+        if (! PublicUploadDisk::exists($this->cover_image)) {
+            return null;
+        }
+
         $url = $this->coverImageUrl();
         if (! $url) {
             return null;

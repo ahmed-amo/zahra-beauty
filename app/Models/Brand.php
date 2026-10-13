@@ -65,8 +65,8 @@ class Brand extends Model
             'name' => $this->name,
             'slug' => $this->slug,
             'url' => $this->url,
-            'image_url' => $this->imageUrl(),
-            'logo_url' => $this->logoUrl(),
+            'image_url' => PublicUploadDisk::exists($this->image) ? $this->imageUrl() : null,
+            'logo_url' => PublicUploadDisk::exists($this->logo) ? $this->logoUrl() : null,
         ];
     }
 
